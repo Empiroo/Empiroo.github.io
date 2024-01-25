@@ -216,13 +216,29 @@
       let linesCleared = 0;
       for (let row = rows - 1; row >= 0; row--) {
         if (board[row].every(cell => cell !== 0)) {
-          board.splice(row, 1);
-          board.unshift(Array(cols).fill(0));
           linesCleared++;
         }
       }
+    
+      if (linesCleared > 0) {
+        const newBoard = [];
+        for (let row = 0; row < rows; row++) {
+          if (!board[row].every(cell => cell !== 0)) {
+            newBoard.push([...board[row]]);
+          }
+        }
+    
+        while (newBoard.length < rows) {
+          newBoard.unshift(Array(cols).fill(0));
+        }
+    
+        board.length = 0;
+        board.push(...newBoard);
+      }
+    
       return linesCleared;
     }
+    
 
     function updateScore(linesCleared) {
       if (linesCleared > 0) {
